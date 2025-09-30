@@ -450,8 +450,12 @@ const Drive = () => {
 
   const handleMove = async () => {
     if (!moveModal) return;
+
+    // If destination is root marker or null, treat as root
+    const targetParentId = moveDestination === "__ROOT__" ? null : moveDestination;
+
     try {
-      await updateFile(moveModal.file.id, { parentId: moveDestination });
+      await updateFile(moveModal.file.id, { parentId: targetParentId });
       setMoveModal(null);
       await refreshFiles();
       showNotification("File moved successfully", "success");
@@ -1108,12 +1112,23 @@ const Drive = () => {
               </h3>
               <div className="space-y-4">
                 <select
-                  value={moveDestination || ""}
-                  onChange={(e) => setMoveDestination(e.target.value || null)}
+                  value={moveDestination ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "") {
+                      setMoveDestination(null);
+                      return;
+                    }
+                    if (value === "__ROOT__") {
+                      setMoveDestination(null);
+                      return;
+                    }
+                    setMoveDestination(value);
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select destination</option>
-                  <option value={null}>My Drive</option>
+                  <option value="__ROOT__">My Drive</option>
                   {currentFolders.map((folder) => (
                     <option key={folder.id} value={folder.id}>{folder.name}</option>
                   ))}
@@ -1129,7 +1144,7 @@ const Drive = () => {
                 <button
                   onClick={handleMove}
                   className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-                  disabled={!moveDestination && moveDestination !== null}
+                  disabled={moveDestination === null}
                 >
                   Move
                 </button>
