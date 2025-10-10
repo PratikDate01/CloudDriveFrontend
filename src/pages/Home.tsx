@@ -23,6 +23,16 @@ export default function DriveHomePage() {
     };
   }, []);
 
+  // Check pathname to open modal
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/signin') {
+      setActiveModal('signin');
+    } else if (path === '/register') {
+      setActiveModal('register');
+    }
+  }, []);
+
 
 
 

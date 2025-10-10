@@ -47,6 +47,8 @@ function App() {
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/signin" element={<Home />} />
+                <Route path="/register" element={<Home />} />
                 {/* Drive routes with lazy loading */}
                 <Route
                   path="/drive"
