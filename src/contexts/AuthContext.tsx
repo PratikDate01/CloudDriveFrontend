@@ -130,7 +130,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Google OAuth login (redirect flow)
   const googleLogin = async () => {
     try {
-      const base = import.meta.env.VITE_API_URL || "https://clouddrivebackend.onrender.com";
+      const base = import.meta.env.VITE_API_URL || "https://cloud-drive-backend.onrender.com";
       const url = `${base}/api/auth/google`;
 
       console.debug('[googleLogin] redirecting to', url);
