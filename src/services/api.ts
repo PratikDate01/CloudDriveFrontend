@@ -158,6 +158,11 @@ class ApiService {
       return { success: false, message: 'Google login failed', error: error.message };
     }
   }
+
+  // Generic GET request
+  async get<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, { method: 'GET' });
+  }
 }
 
 export const apiService = new ApiService();
