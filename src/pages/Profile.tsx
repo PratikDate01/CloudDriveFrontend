@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { getPlans, createCheckout, type Plan } from "../services/billing";
+import { apiService } from "../services/api";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -66,6 +67,20 @@ const Profile = () => {
     };
     loadPlans();
   }, [showUpgrade]);
+
+  // Load current quota when billing tab is active
+  useEffect(() => {
+    if (activeTab !== "billing") return;
+    const loadQuota = async () => {
+      try {
+        const quotaData = await apiService.get("/billing/quota");
+        setCurrentQuota(quotaData);
+      } catch (e) {
+        console.error("Failed to load quota:", e);
+      }
+    };
+    loadQuota();
+  }, [activeTab]);
 
   const handleCheckout = async (planId: string) => {
     try {
