@@ -6,7 +6,7 @@ let socket: Socket | null = null;
 export function connectRealtime(token: string) {
   const raw =
     (import.meta as any)?.env?.VITE_API_BASE_URL ||
-    "https://cloud-drive-backend.onrender.com/api";
+    "https://clouddrivebackend.onrender.com/api";
   const base = raw.trim().replace(/\/api\/?$/, "");
 
   socket = io(base, {
