@@ -1,8 +1,6 @@
 // frontend/src/services/billing.ts
 
-const API_BASE_URL =
-  (import.meta as any)?.env?.VITE_API_BASE_URL ||
-  "https://clouddrivebackend.onrender.com/api";
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || "https://clouddrivebackend.onrender.com"}/api`;
 
 function getBase() {
   const raw = API_BASE_URL;

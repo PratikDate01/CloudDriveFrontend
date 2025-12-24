@@ -51,6 +51,7 @@ const Profile = () => {
 
   const [plans, setPlans] = useState<Plan[]>([]);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [currentQuota, setCurrentQuota] = useState<any>(null);
 
   // Load plans for upgrade modal
   useEffect(() => {
@@ -321,15 +322,26 @@ const Profile = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="text-sm font-medium text-gray-900">Current Plan</h4>
-                        <p className="text-sm text-gray-600">Free Plan</p>
+                        <p className="text-sm text-gray-600">{currentQuota?.plan ? currentQuota.plan.charAt(0).toUpperCase() + currentQuota.plan.slice(1) : "Free"} Plan</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-semibold text-gray-900">0 GB</p>
-                        <p className="text-sm text-gray-600">of 5 GB used</p>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {currentQuota ? Math.round(currentQuota.storage_used / (1024 * 1024 * 1024) * 100) / 100 : 0} GB
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          of {currentQuota ? Math.round(currentQuota.storage_limit / (1024 * 1024 * 1024)) : 5} GB used
+                        </p>
                       </div>
                     </div>
                     <div className="mt-4 bg-gray-200 rounded-full h-2">
-                      <div className="bg-blue-600 h-2 rounded-full" style={{ width: "0%" }}></div>
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{
+                          width: currentQuota
+                            ? `${Math.min((currentQuota.storage_used / currentQuota.storage_limit) * 100, 100)}%`
+                            : "0%"
+                        }}
+                      ></div>
                     </div>
                   </div>
 
@@ -348,9 +360,14 @@ const Profile = () => {
                           </ul>
                           <button
                             onClick={() => handleCheckout(plan.id)}
-                            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            disabled={!plan.hasPrice}
+                            className={`w-full px-4 py-2 rounded-lg transition-colors ${
+                              plan.hasPrice
+                                ? "bg-blue-600 text-white hover:bg-blue-700"
+                                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            }`}
                           >
-                            Upgrade
+                            {plan.hasPrice ? "Upgrade" : "Coming Soon"}
                           </button>
                         </div>
                       ))}
@@ -383,9 +400,14 @@ const Profile = () => {
                   <p className="text-2xl font-bold mb-4">${plan.priceMonthly}/month</p>
                   <button
                     onClick={() => handleCheckout(plan.id)}
-                    className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    disabled={!plan.hasPrice}
+                    className={`w-full px-4 py-2 rounded-lg transition-colors ${
+                      plan.hasPrice
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
                   >
-                    Select Plan
+                    {plan.hasPrice ? "Select Plan" : "Coming Soon"}
                   </button>
                 </div>
               ))}
