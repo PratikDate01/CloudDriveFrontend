@@ -107,3 +107,7 @@ frontend/
 ## License
 
 ISC
+
+---
+
+Made with ❤️ by Pratik Date
